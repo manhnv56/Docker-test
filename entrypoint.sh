@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-BIN_SDK="/app/packetSDK"
+BIN_SDK="/app/Packetshare"
 IP_CHECKER_URL="https://raw.githubusercontent.com/techroy23/IP-Checker/refs/heads/main/app.sh"
 ENABLE_IP_CHECKER="${ENABLE_IP_CHECKER:-false}"
 
@@ -9,8 +9,13 @@ log() {
   echo "$(date '+%Y-%m-%d %H:%M:%S') $*"
 }
 
-if [ -z "${APPKEY:-}" ]; then
-  log " >>> An2Kin >>> ERROR: APPKEY environment variable is not set."
+if [ -z "${EMAIL:-}" ]; then
+  log " >>> An2Kin >>> ERROR: EMAIL environment variable is not set."
+  exit 1
+fi
+
+if [ -z "${PASSWORD:-}" ]; then
+  log " >>> An2Kin >>> ERROR: PASSWORD environment variable is not set."
   exit 1
 fi
 
@@ -91,7 +96,7 @@ main() {
       setup_proxy
       check_ip
       log " >>> An2Kin >>> Starting binary..."
-      "$BIN_SDK" -appkey="$APPKEY" "$@" &
+	  "$BIN_SDK" -email=$EMAIL -password=$PASSWORD -accept-tos &
       PID=$!
       log " >>> An2Kin >>> APP PID is $PID"
       wait $PID
